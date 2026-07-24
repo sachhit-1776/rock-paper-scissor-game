@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<!-- saved from url=(0077)file:///C:/Users/AJIT%20TRIPATHI/Downloads/Rock_Paper_Scissors_Pro_Fixed.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rock Paper Scissors Pro</title>
+<style>
+body{margin:0;font-family:Arial;background:#121826;color:#fff;display:flex;justify-content:center;align-items:center;min-height:100vh}
+.box{background:#1f2937;padding:20px;border-radius:18px;max-width:700px;width:95%;text-align:center;box-shadow:0 0 20px #0008}
+button{padding:12px 18px;margin:6px;border:none;border-radius:12px;font-size:18px;cursor:pointer}
+.play{font-size:48px}.avatar{font-size:72px;transition:.3s}.sel{outline:3px solid #fff}
+#result{font-size:28px;font-weight:bold;margin:12px}
+</style></head><body>
+<div class="box">
+<h1>🎮 Rock Paper Scissors Pro</h1>
+<div>
+<button id="be" onclick="setDiff(&#39;easy&#39;,this)" class="sel">🟢 Easy</button>
+<button id="bm" onclick="setDiff(&#39;medium&#39;,this)">🟡 Medium</button>
+<button id="bh" onclick="setDiff(&#39;hard&#39;,this)">🔴 Hard</button>
+<p>Difficulty: <b id="diff">Easy</b></p>
+</div>
+<div id="avatar" class="avatar">🤖</div><div id="aitext">Let's play!</div>
+<p class="play">You <span id="u">❔</span> &nbsp; VS &nbsp; AI <span id="c">❔</span></p>
+<button onclick="play(&#39;rock&#39;)">✊</button>
+<button onclick="play(&#39;paper&#39;)">✋</button>
+<button onclick="play(&#39;scissors&#39;)">✌️</button>
+<div id="result">Choose your move!</div>
+<h3>😀 You: <span id="us">0</span> | 🤖 AI: <span id="cs">0</span> | 🤝 Draw: <span id="ds">0</span></h3>
+<button onclick="resetGame()">🔄 Reset</button>
+</div>
+<script>
+let difficulty='easy';
+let userScore=0,computerScore=0,drawScore=0;
+document.getElementById('be').classList.add('sel');
+function setDiff(d,b){difficulty=d;diff.textContent=d.charAt(0).toUpperCase()+d.slice(1);
+document.querySelectorAll('[id^=b]').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');}
+const em={rock:'✊',paper:'✋',scissors:'✌️'};
+function aiChoice(user){
+ const arr=['rock','paper','scissors'];
+ const counter={rock:'paper',paper:'scissors',scissors:'rock'};
+ if(difficulty==='easy') return arr[Math.floor(Math.random()*3)];
+ if(difficulty==='medium') return Math.random()<0.3?counter[user]:arr[Math.floor(Math.random()*3)];
+ return Math.random()<0.8?counter[user]:arr[Math.floor(Math.random()*3)];
+}
+function react(type){
+ if(type==='win'){avatar.textContent='😭';aitext.textContent='You beat me!';}
+ else if(type==='lose'){avatar.textContent='😎';aitext.textContent='I win!';}
+ else{avatar.textContent='🤔';aitext.textContent="It's a draw!";}
+}
+function update(){
+ us.textContent=userScore;cs.textContent=computerScore;ds.textContent=drawScore;
+}
+function play(user){
+ const ai=aiChoice(user);u.textContent=em[user];c.textContent=em[ai];
+ if(user===ai){drawScore++;result.textContent="🤝 Draw";react('draw');}
+ else if((user==='rock'&&ai==='scissors')||(user==='paper'&&ai==='rock')||(user==='scissors'&&ai==='paper')){
+ userScore++;result.textContent="🎉 You Win!";react('win');
+ }else{computerScore++;result.textContent="😢 AI Wins!";react('lose');}
+ update();
+ if(userScore===10){setTimeout(()=>{alert("🏆 You won the match!");resetGame();},100);}
+ if(computerScore===10){setTimeout(()=>{alert("🤖 AI won the match!");resetGame();},100);}
+}
+function resetGame(){userScore=computerScore=drawScore=0;update();u.textContent='❔';c.textContent='❔';result.textContent='Choose your move!';avatar.textContent='🤖';aitext.textContent="Let's play!";}
+</script></body></html>
